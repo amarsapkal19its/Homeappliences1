@@ -1,0 +1,186 @@
+
+Dabasbase Name: hmservicedb
+
+Tables : 
+1) Visitor
+	a)	Create query: 
+		CREATE TABLE hmservicedb.Visitor 
+		(
+			VisitorID int NOT NULL AUTO_INCREMENT,
+			FirstName varchar(255) NOT NULL,
+			LastName varchar(255) NOT NULL,
+			MiddleName varchar(255),
+			Email varchar(25),
+			MobileNumber varchar(10) NOT NULL,
+			AadharNumber varchar(20) NOT NULL,
+			PanCard_Number varchar(20),
+			
+			City varchar(255),
+			State varchar(255),
+			Address varchar(255),
+			PinCode varchar(15),
+			
+			Higher_Education varchar(10),
+			Skills varchar(20),
+			PRIMARY KEY (VisitorID)
+		);
+
+
+	b) INSERT query 
+		INSERT INTO hmservicedb.Visitor (FirstName, LastName,MiddleName,Email,MobileNumber,AadharNumber)
+		VALUES ('nilam', 'sapkal', 'subhash', 'Stavanger@gmail.com', 9767548791, 'INDSF5RETRT');
+		
+	C) Retrieved Visitor records
+		Select VisitorID, FirstName, LastName,MiddleName,Email,MobileNumber,AadharNumber from hmservicedb.Visitor
+
+	INSERT INTO hmservicedb.Visitor (FirstName, LastName,MiddleName,Email,MobileNumber,AadharNumber)
+		VALUES ('amar', 'sapkal', 'subhash', 'Stavanger@gmail.com', 9767548791, 'INDSF5RETRT');
+		
+		DELETE FROM hmservicedb.Visitor WHERE FirstName='amar';
+
+
+2) Enquiries
+		CREATE TABLE hmservicedb.Enquiry 
+		(
+			EnquiryID int NOT NULL AUTO_INCREMENT,
+			FirstName varchar(255) NOT NULL,
+			LastName varchar(255) NOT NULL,
+			Email varchar(25),
+			MobileNumber varchar(10) NOT NULL,
+			
+			City varchar(255),
+			State varchar(255),
+			Address varchar(500),
+			PinCode varchar(15),
+			
+			product_Id int,
+			Problem_Description varchar(1000),
+			Problem_Imgurl varchar(1000),
+			enquiryLocation varchar(1000),
+			
+			
+			createdon DATE,
+			status varchar(50),
+			RepairID int,
+			
+			PRIMARY KEY (EnquiryID),
+			CONSTRAINT FK_ProductKey FOREIGN KEY (product_Id)
+				REFERENCES Available_Services(productId),
+			CONSTRAINT FK_VisitorKey FOREIGN KEY (RepairID)
+				REFERENCES hmservicedb.Visitor(VisitorID)
+		);
+
+
+			INSERT INTO hmservicedb.Enquiry (FirstName, LastName,Email,MobileNumber,City,State,Address,PinCode,product_Id,Problem_Description,Problem_Imgurl,enquiryLocation,status)
+		VALUES ('nilam', 'sapkal','nilamsapkal577@gmail.com', '9767548791', 'Pune','Maharashtra','sdfsfsdgfd','412803',71,'too much problem','','','New');
+		
+	
+	Points :
+	
+	Create new columns : 
+						status  : New ,Pending, followup,completed
+						IsFollowup : true /false
+						createon :  
+						resolveon:
+						repairby:
+						repairteam_comments: 
+						user :	
+						
+3) Available_Services
+		CREATE TABLE hmservicedb.Available_Services 
+		(
+			productId int NOT NULL AUTO_INCREMENT,
+			Product varchar(255) NOT NULL,
+			CompanyAssociated varchar(255) NOT NULL,
+			ProductImages varchar(255) NOT NULL,
+			ProductDescription varchar(255) NOT NULL,
+			PRIMARY KEY (productId)
+		);
+		
+			INSERT INTO hmservicedb.Available_Services (Product, CompanyAssociated,ProductImages,ProductDescription)
+		VALUES ('Freez', 'Godrej', 'http://localhost:3000//fridge.jpg', 'Well train people ready to assist you.');
+		
+		INSERT INTO hmservicedb.Available_Services (Product, CompanyAssociated,ProductImages,ProductDescription)
+		VALUES ('washing machine', 'Godrej,xyz,sss', 'http://localhost:3000//washingmachine.jpg', 'We are here to help u.');
+		
+		INSERT INTO hmservicedb.Available_Services (Product, CompanyAssociated,ProductImages,ProductDescription)
+		VALUES ('oven', 'Godrej,xyz,sss', 'http://localhost:3000//washingmachine.jpg', 'We are here to help usdsdsds.');
+		
+		
+		
+3) 
+ALTER TABLE hmservicedb.users
+drop pincode varchar(500);
+
+ALTER TABLE hmservicedb.Available_Services
+add createdon DATE;
+
+ALTER TABLE hmservicedb.Available_Services
+add status varchar(50);
+
+ALTER TABLE hmservicedb.Enquiry
+add status varchar(50);
+
+ALTER TABLE hmservicedb.Enquiry
+add createdon DATE;
+
+
+ALTER TABLE hmservicedb.Enquiry
+ADD RepairID varchar(50)
+
+ALTER TABLE hmservicedb.Enquiry
+ADD FOREIGN KEY (RepairID) REFERENCES hmservicedb.Visitor(VisitorID);
+
+
+ALTER TABLE hmservicedb.Enquiry
+ADD RepairID FK_Visitor
+FOREIGN KEY (RepairID) REFERENCES Visitor(VisitorID);
+
+SELECT * FROM hmservicedb.Enquiry 
+INNER JOIN hmservicedb.Available_Services
+ON Enquiry.product_Id = productId
+where Enquiry.EnquiryID = 1 
+
+
+	CREATE TABLE hmservicedb.Equ_Images 
+		(
+			enq_img int NOT NULL AUTO_INCREMENT,
+			enquiry int NOT NULL,
+			PRIMARY KEY (enq_img),
+			CONSTRAINT FK_EnqKey FOREIGN KEY (enquiry)
+			REFERENCES hmservicedb.Enquiry(EnquiryID)
+		);
+		
+		
+		8-8-2021
+		Update 	Query on enquiry
+		
+		
+		
+		UPDATE hmservicedb.Enquiry
+		SET Email='test@test.com', MobileNumber='9767548988',product_Id=73,RepairID=70,Address=,City=,State= where Enquiry.EnquiryID = 1 
+		
+		
+		SELECT * FROM hmservicedb.Enquiry e left outer join hmservicedb.Visitor  v on v.VisitorID= e.RepairID
+		
+		
+		
+		
+		
+		CREATE TABLE hmservicedb.city (
+    cityId int,
+    CityName nvarchar(20),
+    State nvarchar(20),
+	PRIMARY KEY (cityId)
+);
+
+
+ALTER TABLE hmservicedb.Visitor
+ADD CityID FK_City FOREIGN KEY REFERENCES city(cityId);
+
+ ALTER TABLE hmservicedb.Visitor
+ ADD COLUMN city_id INT;
+ 
+ALTER TABLE hmservicedb.Visitor
+ADD FOREIGN KEY(city_id)
+REFERENCES city(cityid);
